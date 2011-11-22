@@ -1,0 +1,77 @@
+<div class="auction-item-detail">
+    <header>
+      <div class=time>
+        <div class=year>2010</div>
+        <div class=date>19<span>07</span></div>
+       </div>
+      <h1>Sàn Đấu Giá</h1>
+      <div class=comments>99 sản phẩm</div>
+    </header>
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Seller</th>
+        <th>End Date</th>
+        <th></th>
+      </tr>
+      <% @auctions.each do |auction| %>
+        <tr>
+          <td><%= auction.item.title %></td>
+          <td><%= auction.item.seller.email %></td>
+          <td><%= auction.end_date.to_s(:short) %></td>
+          <td>
+            <%= link_to "Details", auction_path(auction) %>
+            <% if user_signed_in? %>
+              <% if current_user.watching?(auction) -%>
+                <%= link_to "Remove watch", remove_watch_path(auction.id), :class => 'remove_watch', :auction_id => "#{auction.id}" %>
+              <% else -%>
+                <%= link_to "Watch", watch_path(auction.id), :class => 'watch', :auction_id => "#{auction.id}" %>
+              <% end -%>
+            <% end -%>
+          </td>
+        </tr>
+      <% end -%>
+    </table>
+    <% content_for :head do %>
+      <script type="text/javascript">
+      $(function() {
+        $(".watch").live('click', function(e) {
+          e.preventDefault();
+          $link = $(this);
+          $.ajax({
+            type: 'POST',
+            url: $link.attr('href'),
+            success: function(data, textStatus) {
+              $link.attr('href', '/remove_watch/' + $link.attr('auction_id'));
+              $link.removeClass('watch').addClass('remove_watch');
+              $link.text('Remove watch');
+              alert("You have watched this auction!");
+            },
+            error: function(request, textStatus, errorThrown) {
+              alert("Error happen!");
+            }
+          });
+        });
+        $(".remove_watch").live('click', function(e) {
+          e.preventDefault();
+          $link = $(this);
+          $.ajax({
+            type: 'DELETE',
+            url: $link.attr('href'),
+            success: function(data, textStatus) {
+              $link.attr('href', '/watch/' + $link.attr('auction_id'));
+              $link.removeClass('remove_watch').addClass('watch');
+              $link.text('Watch');
+              alert("You have not watched this auction anymore!");
+            },
+            error: function(request, textStatus, errorThrown) {
+              alert("Error happen!");
+            }
+          });
+          return false;
+        });
+      });
+      </script>
+    <% end -%>
+
+</div>

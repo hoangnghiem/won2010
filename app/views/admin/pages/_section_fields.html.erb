@@ -1,0 +1,19 @@
+<div class="fields section clearfix">
+  <div class="section-fields">  
+    <p>
+      <%= f.label :name %><br/>
+      <%= f.text_field :name, :class => 'full' %>
+    </p>
+    <p>
+      <%= f.label :content %><br/>
+      <%= f.text_area :content, :class => 'mceEditor' %>
+    </p>
+    <p>
+      <%= f.check_box :active %>
+      <%= f.label :active %>
+    </p>
+  </div>
+  <div class="section-close">
+    <%= link_to_remove_sections image_tag("admin/close.png"), f %>
+  </div>
+</div>

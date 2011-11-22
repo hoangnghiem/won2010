@@ -1,0 +1,19 @@
+<ul id="top-menu">
+  <li><%= link_to "Home", root_path %></li>
+  <li id=services>
+        <a href=#>Categories</a>
+        <ul id=subMenu>
+          <% ParentCategory.all.each do |parent_category| %>
+            <li><a href=#><%=parent_category.category_name %></a></li>
+          <%end%>
+        </ul>
+   </li>
+  <li><%= link_to "Sàn", auction_center_path %></li>
+  <% if user_signed_in? %>
+    <li><%= link_to "Công Cụ", auction_tools_path %></li>
+    <li><%= link_to "Thoát", destroy_user_session_path %></li>
+  <% else -%>
+    <li><%= link_to "Đăng Nhập", new_user_session_path %> or <%= link_to 'Đăng Ký Thành Viên', new_user_registration_path %></li>
+  <% end -%>
+</ul>
+

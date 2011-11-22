@@ -1,0 +1,7 @@
+start bid : 100
+increment : 5
+A bid: 120 => current bid = 100 + 5, max current bid = 120, increment: 10
+B bid: 150 => current bid = 120 + 10, max current bid = 150, increment : 15 (calculate base on current bid) (notify A outbid)
+C bid: 140 => current bid = 140 + 15, max current bid = 150, increment : 15 (notify C outbid)
+              if current bid greater than max current bid => current bid = max  
+D bid: 

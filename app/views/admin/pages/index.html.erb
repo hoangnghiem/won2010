@@ -1,0 +1,38 @@
+<% if can?(:create, Page) %>
+<div class="grid-buttons">
+  <%= link_to "Create new Page", new_admin_page_path, :class => "btn btn-green big" %>
+</div>
+<% end %>
+<div style="clear:both"></div>
+<table class="grid">
+  <tr>
+    <th width="20%">Page Name</th>
+    <th width="20%">Page Path</th>
+    <% if can?(:update, Page) || can?(:destroy, Page) %>
+      <th></th>
+    <% end %>
+  </tr>
+  <% unless @pages.blank? %>
+    <% @pages.each do |page| %>
+    <tr>
+      <td><%= page.name %></td>
+      <td><%= page.path%></td>
+      <% if can?(:update, Page) || can?(:destroy, Page) %>
+      <td>
+        <% if can?(:update, Page) %>
+          <%= link_to image_tag("admin/edit.png"), edit_admin_page_path(page), :title => 'Edit', :class => 'btn-icon' %>
+        <% end %>
+        <% if can?(:destroy, Page) %>
+          <%= link_to image_tag("admin/delete.png"), admin_page_path(page), :confirm => 'Are you sure?', :method => :delete, :class => 'btn-icon', :title => "Delete" %></td>
+        <% end %>
+      <% end %>
+    </tr>
+    <% end %>
+  <% else %>
+    <tr>
+      <td colspan="5">
+        <span>There is no pages.</span>
+      </td>
+    </tr>
+  <% end %>
+</table>

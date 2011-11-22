@@ -1,0 +1,34 @@
+<% if can?(:create, Role) %>
+<div class="grid-buttons">
+  <%= link_to "Create new Admin Role", new_admin_role_path, :class => "btn btn-green big" %>
+</div>
+<% end %>
+<div style="clear:both"></div>
+<table class="grid">
+  <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <% if can?(:update, Role) || can?(:destroy, Role) %>
+    <th></th>
+    <% end %>
+  </tr>
+  <% unless @roles.blank? %>
+    <% @roles.each do |role| %>
+    <tr>
+      <td><%= role.name %></td>
+      <td><%= role.description %></td>
+      <td>
+        <% if can?(:update, Role) %>
+          <%= link_to image_tag("admin/edit.png"), edit_admin_role_path(role), :class => "btn-icon" %>
+        <% end %>
+        <% if can?(:destroy, Role) %>
+          <%= link_to image_tag("admin/delete.png"), admin_role_path(role), :confirm => 'Are you sure?', :method => :delete, :class => "btn-icon", :title => 'Delete' %></td>
+        <% end %>
+    </tr>
+    <% end %>
+  <% else %>
+    <tr>
+      <td colspan="4">There is no roles.</td>
+    </tr>
+  <% end %>
+</table>

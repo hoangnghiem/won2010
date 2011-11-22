@@ -1,0 +1,151 @@
+/* PAGE HEADER */
+#page-header {
+	background-color: #EFF9FF;
+	padding: 10px;	
+}
+
+#logo {
+	float: left;
+}
+
+#top-menu {
+	list-style: none;
+	float: right;
+}
+
+#top-menu li {
+	display: inline;
+}
+
+/* PAGE FOOTER */
+#page-footer {
+	font-size: 12px;
+    clear: left;
+}
+
+/* PAGE BODY */
+#page-body {
+	margin-bottom: 40px;
+}
+
+#auction-tools {
+	float: left;
+	background-color: #FFF9DF;
+	width: 250px;
+	padding: 10px;
+}
+
+#auction-tools #nav {
+	list-style: none;
+}
+
+#main-content {
+	float: left;
+}
+
+/* COMMON */
+.clearfix:after {
+	content:".";
+	display:block;
+	height:0;
+	clear:both;
+	visibility:hidden;
+}
+.clearfix {display:inline-block;}
+/* Hide from IE Mac \*/
+.clearfix {display:block;}
+/* End hide from IE Mac */
+.comment {
+  border: 1px solid #CCC;
+  padding: 10px;
+  margin-bottom: 5px;  
+}
+.hide {
+  display: none;  
+}
+.show {
+  display: block;
+}
+#select_contacts {
+  width: 400px;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow: auto;
+}
+#contacts {
+  width: 100%;
+}
+
+
+/**** FORM Style ****/
+form label {
+    float: left;
+    width: 160px;
+    font-weight: bold;
+}
+
+div.fields, form a {
+    margin-left: 160px;
+}
+
+div.fields a {
+    margin-left: 0px;
+}
+
+span.clear_left br {
+    clear: left;
+}
+
+form input, form select {
+    /*width: 180px;     */
+    margin-bottom: 7px;
+}
+
+div.photo img {
+    padding: 7px;
+}
+
+
+/** Category Style Sheet****/
+div.link-list {
+    width:10.2em;
+    position:absolute;
+    font-size:80%;
+    padding-left:1%;
+    padding-right:1%;
+    margin-left:0;
+    margin-right:0;
+}
+
+#main-auction {
+    margin-left:10.2em;
+    margin-right:10.2em;
+    padding-left:1em;
+    padding-right:1em;
+}
+#nav-left {
+    left:0;
+}
+#nav-right {
+    right:0;
+}
+
+/******** Item Details Style */
+div#auction-item-detail {
+    float: left;
+    margin-right: 25px;
+}
+div#history {
+    float: left;
+}
+
+.box-title {
+    font-weight: bold;
+    color: blue;
+    background: aquamarine;
+}
+
+#item-info {
+    color: blue;
+    background: lightblue;
+}

@@ -1,0 +1,101 @@
+<h1>
+  Invite your friend to get more credits. 
+  Use this link <b><%= refer_sign_up_url(:referer_id => current_user.id) %></b>
+  anywhere to invite your friends.
+</h1>
+
+<%= link_to 'Gmail', '#', :id => 'gmail' %>
+<%= link_to 'Yahoo', '#', :id => 'yahoo' %>
+<%= link_to 'Yahoo Vietnam', '#', :id => 'yahoo_vn' %>
+<div id="importer" class="hide">
+  <%= form_tag fetch_contacts_path, :id => 'frm_contact' do %>
+    <div id="error" class="hide"></div>
+    <%= label_tag 'email', "Email" %>
+    <%= text_field_tag 'email' %>@
+    <%= select_tag 'target', options_for_select(['gmail.com', 'yahoo.com', 'yahoo.com.vn']), :id => 'target' %>
+    <br/>
+    <%= label_tag 'password', "Password" %>
+    <%= password_field_tag 'password' %><br/>
+    <%= submit_tag 'Find contacts' %>
+    <%= image_tag('loader16.gif', :class => 'hide', :id => 'loader') %>
+  <% end -%>
+</div>
+
+<div id="contacts_holder"></div>
+<%= form_for(@invitation) do |f| -%>
+  <% if @invitation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@invitation.errors.count, "error") %> prohibited this invitation from being sent:</h2>
+      <ul>
+      <% @invitation.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <p>
+    <%= f.label :recipients, 'To:' %><br/>
+    <%= f.text_area :recipients, :cols => 60, :rows => 5 %>
+  </p>
+  <p>
+    <%= f.label :message, 'Message:' %><br/>
+    <%= f.text_area :message, :cols => 60, :rows => 5 %>
+  </p>
+  <p>Make sure the text <b><%= Invitation::REFER_TOKEN %></b> is included in your message text.</p>
+  <%= f.submit 'Send Invite' %>
+<% end -%>
+
+<%= link_to 'Fetch', fetch_contacts_path %>
+
+<% content_for :head do -%>
+  <script type="text/javascript">
+    $(function() {
+      $("#gmail").click(function() {
+        $("#importer").slideDown();
+        $("#target").val('gmail.com')
+      });
+      $("#yahoo").click(function() {
+        $("#importer").slideDown();
+        $("#target").val('yahoo.com')
+      });
+      $("#yahoo_vn").click(function() {
+        $("#importer").slideDown();
+        $("#target").val('yahoo.com.vn')
+      });
+      $("#frm_contact").submit(function(e) {
+        $("#loader").show();
+        e.preventDefault();
+        $.post("<%= fetch_contacts_path %>", "&" + $("#frm_contact").serialize(), function(data) {
+          if (data == "invalid") {
+            $('#error').html("Invalid email or password.").fadeIn();
+          } else {
+            $('#error').hide();
+            $("#contacts_holder").html(data).hide().fadeIn();
+            $("#importer").hide();
+          }
+          $("#loader").fadeOut();
+        });
+      });
+      $("#add_contact").live('click', function() {
+        $("#importer").hide();
+        var selectedEmails = [];
+        //console.log($("input:checkbox[id^=em]:checked"));
+        $("input:checkbox[id^=em]:checked").each(function() {
+          selectedEmails.push($(this).val());
+        });
+        $("#contacts_holder").html('').fadeOut('slow');
+        var s = $("#invitation_recipients").val();
+        if (s.length > 0) {
+          if (s.match(/,$/) != null) {
+            s += selectedEmails.join(",");
+          } else {
+            s += "," + selectedEmails.join(",");  
+          }
+        } else {
+          s = selectedEmails.join(",");
+        }
+        $("#invitation_recipients").val(s).focus();
+      });
+    })
+  </script>
+<% end -%>

@@ -1,0 +1,20 @@
+<h1>Auction I'm watching</h1>
+
+<table>
+  <% if @watchings.blank? -%>
+  <tr>
+    <td>
+      You are not watching any auctions.
+    </td>
+  </tr>
+  <% else -%>
+    <% @watchings.each do |w| -%>
+    <tr>
+      <td>
+        <%= w.auction.item.title %>
+      </td>
+    </tr>
+    <% end -%>
+  <% end -%>
+</table>
+

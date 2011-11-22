@@ -1,0 +1,38 @@
+<p>
+  <b>Title:</b>
+  <%= @item.title %>
+</p>                              
+
+<p>
+  <b>Category:</b>
+  <%= @item.category.category_name %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @item.category.category_name %>
+</p>
+
+<p>
+  <b>Location:</b>
+  <%= @item.location %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @item.description.html_safe %>
+</p>
+
+<p>
+  <b>Start bid:</b>
+  <%= @item.start_bid_price %>
+</p>
+
+<p>
+  <b>Bid period:</b>
+  <%= @item.bid_period %>
+</p>
+
+
+<%= link_to 'Edit', edit_item_path(@item) %> |
+<%= link_to 'Back', items_path %>

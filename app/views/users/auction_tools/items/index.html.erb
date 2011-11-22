@@ -1,0 +1,33 @@
+<h1>Listing items</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Category</th>
+    <th>Location</th>
+    <th>Description</th>
+    <th>Start bid</th>
+    <th>Bid period</th>
+    <th></th>
+  </tr>
+
+<% @items.each do |item| %>
+  <tr>
+    <td><%= item.title %></td>
+    <td><%= item.category.category_name %></td>
+    <td><%= item.location %></td>
+    <td><%= item.description.html_safe %></td>
+    <td><%= item.start_bid_price %></td>
+    <td><%= item.bid_period %></td>
+    <td>
+			<%= link_to 'Show', item %>
+			<%= link_to 'Edit', edit_item_path(item) %>
+			<%= link_to 'Destroy', item, :confirm => 'Are you sure?', :method => :delete %>
+		</td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Item', new_item_path %>

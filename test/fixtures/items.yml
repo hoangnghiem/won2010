@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  title: MyString
+  location: MyString
+  description: MyText
+  start_bid: 1
+  bid_period: 1
+
+two:
+  title: MyString
+  location: MyString
+  description: MyText
+  start_bid: 1
+  bid_period: 1

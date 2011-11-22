@@ -1,0 +1,82 @@
+<% form_for [:admin, @admin] do |f| %>
+  <fieldset>
+    <legend>Account Information</legend>
+    <%= hidden_field_tag :s, params[:s].blank? ? "" : "1" %>
+    <p>
+      <% 
+        required = params[:action] != 'edit'
+        opts = {}
+        opts[:class] = "half#{required ? '' : ' disabled'}"
+        opts[:disabled] = 'disabled' unless required
+      %>
+      <%= f.label :username, 'Username:', :class => "#{required ? 'required' : '' }" %><br/>
+      <%= f.text_field :username, opts %>
+    </p>
+    <% if params[:action] != 'edit' %>
+    <p>
+      <%= f.label :password, 'Password:', :class => 'required' %><br/>
+      <%= f.password_field :password, :class => 'half' %>
+    </p>
+    <p>
+      <%= f.label :password_confirmation, 'Confirm Password:', :class => 'required' %><br/>
+      <%= f.password_field :password_confirmation, :class => 'half' %>
+    </p>
+    <% end %>
+    <p>
+      <%= f.label :email, 'Email:', :class => 'required' %><br/>
+      <%= f.text_field :email, :class => 'half' %>
+    </p>
+    <p>
+      <%= f.label :first_name, 'First Name:', :class => 'required' %><br/>
+      <%= f.text_field :first_name, :class => 'half' %>
+    </p>
+    <p>
+      <%= f.label :last_name, 'Last Name:', :class => 'required' %><br/>
+      <%= f.text_field :last_name, :class => 'half' %>
+    </p>
+  </fieldset>
+  <% unless @admin.super_admin? %>
+  <fieldset>
+    <legend>Admin Roles</legend>
+    <p>
+      <% roles = Role.all.reject{|r| r.name == Role::SUPER_ADMIN} %>
+      <% unless roles.blank? %>
+        <% roles.each do |role| %>
+          <%= check_box_tag "admin[role_ids][]", role.id, @admin.roles.include?(role), :id => "role-#{role.id}" %>
+          <label for="role-<%= role.id %>"><%= role.name %></label><br/>
+        <% end %>
+      <% else %>  
+        <div class="box box-warning">
+          There is no roles configured, the user can be created but cannot access any functions. <%= link_to "click here", admin_roles_path %> 
+          to configure roles.
+        </div>
+      <% end %>
+    </p>
+  </fieldset>
+  <% end %>
+  <p class="box">
+    <input type="submit" value="<%= params[:action] == 'edit' ? 'Update' : 'Create' %>" class="btn btn-green big">
+    <%= link_to "Back", admin_admins_path, :class => "btn" %>
+  </p>
+<% end %>
+
+<% if params[:action] == 'edit' %>
+  <%= form_for(@admin, :as => 'admin', :url => password_path('admin'), :html => { :method => :put }) do |f| %>
+    <fieldset>
+      <legend>Change Password</legend>
+      <%= f.hidden_field :id %>
+      <p>
+        <%= f.label :password, 'New password' %><br />
+        <%= f.password_field :password %>
+      </p>
+      <p>
+        <%= f.label :password_confirmation, 'Confirm new password' %><br />
+        <%= f.password_field :password_confirmation %>
+      </p>
+      <p class="box">
+        <input type="submit" value="Change Password" class="btn btn-green big">
+        <%= link_to "Back", admin_admins_path, :class => "btn" %>
+      </p>
+    </fieldset>
+  <% end %>
+<% end %>

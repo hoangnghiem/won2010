@@ -1,0 +1,30 @@
+<ul class="sf-menu">
+  <li class="dashboard"><%= link_to "Dashboard", admin_root_path_path %></li>
+  <% if allow?([Admin, Role, User]) %>
+  <li class="user-management">
+    <a href="#">User Management</a>
+    <ul>
+      <% if can? :read, Admin %>
+        <li class="admin-users"><%= link_to "Admin Users", admin_admins_path %></li>
+      <% end %>
+      <% if can? :read, Role %>
+        <li class="admin-roles"><%= link_to "Admin Roles", admin_roles_path %></li>
+      <% end %>  
+      <% if can? :read, User %>
+        <li class="website-users"><%= link_to "Web Site Users", admin_users_path %></li>
+      <% end %>
+    </ul>
+  </li>
+  <% end %>
+  <li><a href="#">Categories</a></li>
+  <% if allow?([Page]) %>
+  <li class="cms">
+    <a href="#">Content Management</a>
+    <ul>
+      <% if can? :read, Page %>
+      <li class="cms-pages"><%= link_to "Pages", admin_pages_path %></li>
+      <% end %>
+    </ul>
+  </li>
+  <% end %>
+</ul>

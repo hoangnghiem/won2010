@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Won2010</title>
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <%= stylesheet_link_tag 'admin/reset', 'admin/960', 'admin/admin', 'admin/superfish' %>
+  <%= javascript_include_tag 'jquery', 'jquery-ui', 'rails-jquery', 'sf_menu/hoverIntent','sf_menu/superfish', 'admin' %>
+  <%= csrf_meta_tag %>
+  <%= yield :head %>
+  <script type="text/javascript">
+    // initialise plugins
+    $(function(){
+      $('ul.sf-menu').superfish();
+      <% unless @current_tab.blank? %>  
+        $('<%= @current_tab.map { |t| ".#{t}" }.join(",") %>').addClass("current");
+      <% end %>
+    });
+  </script>
+</head>
+<body>
+<div id="container">
+  <div id="wrap-header">
+    <div id="header" class="container_16">
+      <h1 class="grid_6">Won2010</h1>
+      <% if admin_signed_in? %>
+        <ul id="top-menu" class="grid_10">
+          <li>Hello <b style="color:#F4BF06;"><%= link_to current_admin.full_name, edit_admin_admin_path(current_admin) + "?s=1" %></b></li>
+          <li><span style="color:#444;">|</span></li>
+          <li><%= link_to "Visit Site", root_path %></li>
+          <li><span style="color:#444;">|</span></li>
+          <li><%= link_to "logout", destroy_admin_session_path %></li>
+        </ul>
+      <% end %>
+    </div>
+    <div id="nav-bar" class="container_16 clearfix">
+      <%= render :partial => "shared/admin/menu" %>
+    </div>
+  </div>
+  <div id="pagetitle">
+    <div class="container_16">
+      <h2><%= @title ||= "No Title" %></h2>
+    </div>
+  </div>
+  <div id="wrap-page" class="clearfix">
+    <% unless flash.blank? %>
+      <div class="flash container_16">
+        <% flash.each do |k, v| %>
+          <% if k != :error_msgs %>
+            <div class="box box-<%= k %>"><%= v.html_safe %></div>
+          <% end %>
+        <% end %>  
+        <% if !flash[:error_msgs].blank? && flash[:error_msgs].is_a?(Array) %>
+          <div class="box box-error-msg">
+            <ol>
+              <% flash[:error_msgs].each do |msg| %>
+                <li><%= msg.html_safe %></li>
+              <% end %>
+            </ol>
+          </div>
+          <% flash.discard %>
+        <% end %>
+      </div>
+    <% end %>
+    <div id="page" class="container_16">
+      <%= yield %>
+    </div>
+  </div>
+  <div class="clearfooter"></div>
+</div>
+<div id="wrap-footer">
+  <div id="footer" class="container_16">
+    Powered by Online Auction Team.    
+  </div>
+</div>
+</body>
+</html>

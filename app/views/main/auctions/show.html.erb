@@ -1,0 +1,150 @@
+
+<div class="auction-item-detail">
+    <header>
+      <div class=time>
+        <div class=year>&nbsp;</div>
+        <div class=date>&nbsp;<span>Đấu giá</span></div>
+      </div>
+      <h1><%= @auction.item.title %></h1>
+      <div class=comments>345 bids</div>
+    </header>
+    <div id="photos">
+      <% @auction.item.photos.each do |photo| -%>
+        <div class="photo"><%= image_tag(photo.data(:medium)) %></div>
+      <% end -%>
+    </div>
+    <div id="auction-box" class="clearfix">
+        <div class="info-box">
+            <div class="info-box-label">Seller:</div> <div class=float-left><%= @auction.seller.username %></div>
+            <br/>
+            <div class="info-box-label">Category:</div> <div class=float-left><%= @auction.item.category.category_name %></div>
+            <br/>
+            <div class="info-box-label">Location:</div> <div class=float-left><%= @auction.item.location %></div>
+            <br/>
+            <div class="info-box-label">Shipping Fee:</div> <div class=float-left></div>
+            <br/>
+            <div class="info-box-label">Current Bid:</div><div class=float-left><%= @auction.current_bid %></div>
+            <br/>
+            <div class="info-box-label">Total bid:</div><div class=float-left><%= @auction.bids.size > 0 ? "#{@auction.bids.count} bids" : 'No bid yet'  %> </div>
+
+        </div>
+        <div id="count_down" class="time-box clearfix"></div>
+
+        <div id=bid-box class=time-box>
+            <% if user_signed_in? && current_user != @auction.seller %>
+              <%= form_for(@bid) do |f| %>
+                <%= f.hidden_field :bidder_id %>
+                <%= f.hidden_field :auction_id %>
+                <p><%= f.label :price, "Your bid (must greater than #{@auction.current_bid})" %></p>
+                <p><%= f.text_field :price %> </p>
+                <p><%= f.submit 'Place bid' %></p>
+                <a class=button href=#>Place Bid</a>
+              <% end -%>
+
+              <% if (current_user.credit < @auction.current_bid ) -%>
+                <p style="font-weight:bold;font-style:italic;color:red;">
+                  You need more <%= @auction.current_bid - current_user.credit + 1 %> credit to bid this item.
+                </p>
+              <% end -%>
+            <%else -%>
+               <label>You are the owner of this auction item.</label>
+            <% end -%>
+
+        </div>
+    </div>
+   <div class="clear-both comment-box">
+    <header><h2>Description</h2></header>
+    <div id=description-content>
+        <%= @auction.item.description.html_safe %>
+    </div>
+   </div>
+  <div class="comment-box">
+    <header><h2>Questions & Comments</h2></header>
+    <% if @auction.comments.size > 0 -%>
+      <div id="comments">
+        <% @auction.comments.each do |comment| -%>
+          <div class="comment">
+            <p>
+              Commentator: <%= comment.commentator.username %>
+              <% if comment.commentator == @auction.seller -%>
+                (Seller)
+              <% end -%>
+            </p>
+            <p><%= comment.message %></p>
+            <p><%= time_ago_in_words(comment.created_at) %> ago</p>
+          </div>
+        <% end -%>
+      </div>
+    <% end -%>
+    <div id="frm-comment">
+    <% if user_signed_in? %>
+      <div class="user-thumb">
+          <div style="background: url(&quot;/images/default_avatar_t.jpg&quot;) no-repeat scroll 0% 0% transparent; height: 50px; width: 50px;">
+          <a href="/profile/110376"><img width="50" height="50" class="frame" src="/images/layout/frame_50.png"></a>
+          </div>
+      </div>
+      <%= form_for(@comment) do |f| %>
+        <%= f.hidden_field :commentator_id %>
+        <%= f.hidden_field :auction_id %>
+        <p><%= f.text_area :message, :cols => 60, :rows => 5 %></p>
+        <p><%= f.submit 'Submit' %></p>
+         <a class=button href=#>Submit</a>
+      <% end -%>
+    <% else -%>
+      <p>
+      Got a question or comment? Please
+      <%= link_to "Log in", new_user_session_path %> or
+      <%= link_to 'Sign up', new_user_registration_path %> first.
+      </p>
+    <% end -%>
+    </div>
+   </div>
+</div>
+<% if !@history.blank? && @history.size > 0 -%>
+  <div class="auction-item-detail">
+    <header>
+      <h1>&nbsp;Bid History</h1>
+    </header>
+    <% if @history.size == 1 -%>
+      <p>
+        High bidder: <b><%= @history.first.bidder_name %></b><br/>
+        at <%= @history.first.created_at %>
+      </p>
+    <% else -%>
+      <% @history.each_with_index do |bid, index| -%>
+        <% if index == 0 -%>
+          <p>
+            <b>High bidder: <%= bid.bidder_name %></b><br/>
+            at <%= bid.created_at %>
+          </p>
+        <% else -%>
+          <br/>
+          <p>
+            Bidder: <%= bid.bidder_name %><br/>
+            Bid price: <%= bid.price %><br/>
+            at <%= bid.created_at %>
+          </p>
+        <% end -%>
+      <% end -%>
+    <% end -%>
+  </div>
+<% end -%>
+ 
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'jquery.countdown' %>
+  <%= javascript_include_tag 'jquery.countdown', 'jquery.countdown-vn'%>
+  <script type="text/javascript">
+    $(function(){      
+      year = <%= @auction.end_date.year %>;
+      month = <%= @auction.end_date.month %> - 1;
+      day = <%= @auction.end_date.day %>;
+      hour = <%= @auction.end_date.hour %>;
+      minutes = <%= @auction.end_date.min %>;
+      seconds = <%= @auction.end_date.sec %>;
+      miliseconds = <%= @auction.end_date.usec %>;
+      var expire_date = new Date(year, month, day, hour, minutes, seconds, miliseconds); 
+      $("#count_down").countdown({until: expire_date});
+    })
+  </script> 
+<% end -%>
+

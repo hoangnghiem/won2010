@@ -1,0 +1,11 @@
+<div id="select_contacts">
+  <table class="contacts">
+    <% emails.each_with_index do |email, index| -%>
+    <tr>
+      <td><input type="checkbox" id="<%= 'em' + index.to_s %>" value="<%= email %>" checked></td>
+      <td><label for="<%= 'em' + index.to_s %>"><%= email %></label></td>
+    </tr>
+    <% end -%>
+  </table>
+</div>
+<div><a href="#" id="add_contact">Add contact</a></div>

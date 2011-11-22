@@ -1,0 +1,42 @@
+<% if can?(:create, Admin) %>
+<div class="grid-buttons">
+  <%= link_to "Create new Admin User", new_admin_admin_path, :class => "btn btn-green big" %>
+</div>
+<% end %>
+<div style="clear:both"></div>
+<table class="grid">
+  <tr>
+    <th width="20%">Username</th>
+    <th width="20%">Full Name</th>
+    <th width="20%">Email</th>
+    <th>Last Login</th>
+    <% if can?(:update, Admin) || can?(:destroy, Admin) %>
+      <th></th>
+    <% end %>
+  </tr>
+  <% unless @admins.blank? %>
+    <% @admins.each do |admin| %>
+    <tr>
+      <td><%= admin.username %></td>
+      <td><%= admin.full_name %></td>
+      <td><%= admin.email %></td>
+      <td><%= !admin.last_sign_in_at.blank? ? admin.last_sign_in_at.to_s(:short) : 'Not logged in.' %></td>
+      <% if can?(:update, Admin) || can?(:destroy, Admin) %>
+      <td>
+        <% if can?(:update, Admin) %>
+          <%= link_to image_tag("admin/edit.png"), edit_admin_admin_path(admin), :title => 'Edit', :class => "btn-icon" %>
+        <% end %>
+        <% if can?(:destroy, Admin) %>
+          <%= link_to image_tag("admin/delete.png"), admin_admin_path(admin), :confirm => 'Are you sure?', :method => :delete, :class => "btn-icon", :title => 'Delete' %></td>
+        <% end %>
+      <% end %>
+    </tr>
+    <% end %>
+  <% else %>
+    <tr>
+      <td colspan="5">
+        <span>There is no admins.</span>
+      </td>
+    </tr>
+  <% end %>
+</table>

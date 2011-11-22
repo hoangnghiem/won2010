@@ -1,0 +1,28 @@
+<% content_for :head do -%>
+  <%= include_tiny_mce_if_needed %>
+<% end -%>
+<% form_for [:admin, @page] do |f| %>
+  <fieldset>
+    <legend>CMS Page</legend>
+    <p>
+      <%= f.label :name, 'Page Name:', :class => 'required' %><br/>
+      <%= f.text_field :name, :class => 'half' %>
+    </p>
+    <p>
+      <%= f.label :path, 'Page Path:', :class => 'required' %><br/>
+      <%= f.text_field :path, :class => 'half' %>
+    </p>
+  </fieldset>
+  <fieldset>
+    <legend>Sections</legend>
+    <%= f.fields_for :sections do |builder| %>
+      <%= render "section_fields", :f => builder %>
+    <% end %>
+    <%= link_to_add_fields "Add More Section", f, :sections, :class => 'btn btn-blue' %>
+  </fieldset>
+
+  <p class="box">
+    <input type="submit" value="<%= params[:action] == 'edit' ? 'Update' : 'Create' %>" class="btn btn-green big">
+    <%= link_to "Back", admin_pages_path, :class => "btn" %>
+  </p>
+<% end %>

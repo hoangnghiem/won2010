@@ -1,0 +1,66 @@
+<% content_for :head do -%>
+  <%= include_tiny_mce_if_needed %>
+<% end -%>
+
+<%= form_for(@item, :html => { :multipart => true }) do |f| %>
+  <% if @item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+      <% @item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :location %>
+    <%= f.select :location, VnLocation.locations %><br/>
+  </div>
+   <div class="field">
+    <%= f.label :category %>
+    <%= f.select :category_id, options_from_collection_for_select(Category.all, :id, :category_name) %><br/>
+  </div>
+  <% if !@photos.blank? %>
+     <div class="field"><%= f.label :photos, 'Photos' %></div>
+     <div class="photo">
+        <% @photos.each do |photo| %>
+          <%= image_tag(photo.data(:thumb)) %>
+        <% end -%>
+     </div>
+  <% else %>
+    <div class="field"><%= f.label :add_photos, 'Add the photo' %></div>
+        <div class="photo">
+          <%= image_tag("/images/no_image.gif") %>
+     </div>
+      <%= f.fields_for :photos do |builder| %>
+      <%= render "photo_fields", :f => builder %>
+    <% end %>
+  <% end -%>
+  
+
+  <%= link_to_add_fields "Add More Photo", f, :photos %>
+  <br /><br />
+    
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_area :description, :class => "mceEditor" %><br />
+  </div>
+  <div class="field">
+    <%= f.label :start_bid_price, 'Start Bid?' %>
+    <%= f.text_field :start_bid_price %>
+  </div>
+  <div class="field">
+    <%= f.label :bid_period, 'Number of Days?' %>
+    <%= f.select :bid_period, (3..30) %>
+  </div>
+  <div class="actions">
+     <br/><%= f.submit %>
+  </div>
+<% end %>

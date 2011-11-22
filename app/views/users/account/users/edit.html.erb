@@ -1,0 +1,30 @@
+<%= form_for(@user) do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= f.fields_for :profile do |builder| %>
+  	<div class="field">
+			<%= builder.label :name %><br />
+			<%= builder.text_field :name %>
+		</div>
+		<div class="field">
+			<%= builder.label :location %><br />
+			<%= builder.text_field :location %>
+		</div>
+		<div class="field">
+			<%= builder.label :gender %><br />
+			<%= builder.select :gender, ["Male", "Female"] %>
+		</div>
+  <% end -%>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

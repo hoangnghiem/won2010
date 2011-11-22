@@ -1,0 +1,59 @@
+<% form_for [:admin, @role] do |f| %>
+  <fieldset>
+    <legend>Administrator Role</legend>
+    <p>
+      <%= f.label :name, 'Name:', :class => 'required' %><br/>
+      <%= f.text_field :name, :class => 'half' %>
+    </p>
+    <p>
+      <%= f.label :description, 'Description:', :class => 'required' %><br/>
+      <%= f.text_area :description, :class => 'half', :rows => 5 %>
+    </p>
+  </fieldset>
+  
+  <fieldset>
+    <legend>Access Control</legend>
+    <table class="perms">
+      <tr>
+        <th class="name"></th>
+        <th class="act">Read</th>
+        <th class="act">Create</th>
+        <th class="act">Update</th>
+        <th class="act">Destroy</th>
+      </tr>
+      <% Permission.all.group_by(&:object_type).each do |type, permissions| %>
+      <tr>
+        <td class="name"><%= type %></td>
+        <% permissions.each do |permission| %>
+          <td class="act"><%= check_box_tag "role[permission_ids][]", permission.id, @role.permissions.include?(permission), :id => "perm_#{permission.id}" %></td>
+        <% end %>
+        <% if permissions.size < 4 %>
+          <% (4 - permissions.size).times do %>
+            <td class="act">&nbsp;</td>
+          <% end %>
+        <% end %>
+      </tr>
+      <% end %>
+    </table>
+  </fieldset>
+
+  <p class="box">
+    <input type="submit" value="<%= params[:action] == 'edit' ? 'Update' : 'Create' %>" class="btn btn-green big">
+    <%= link_to "Back", admin_roles_path, :class => "btn" %>
+  </p>
+<% end %>
+<script type="text/javascript" language="javascript" charset="utf-8">
+//<![CDATA[
+  $(function() {
+    $("input[id^='perm']").filter(':checked').parent().addClass('grant');
+    $("input[id^='perm']").filter(':not(:checked)').parent().addClass('reject');
+    $("input[id^='perm']").click(function() {
+      if ($(this).parent().hasClass('grant')) {
+        $(this).parent().removeClass('grant').addClass('reject');
+      } else {
+        $(this).parent().removeClass('reject').addClass('grant');
+      }
+    });
+  });
+//]]>
+</script>

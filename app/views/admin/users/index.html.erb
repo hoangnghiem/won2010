@@ -1,0 +1,46 @@
+<% if can?(:create, User) %>
+<div class="grid-buttons">
+  <%= link_to "Create new User", new_admin_user_path, :class => "btn btn-green big" %>
+</div>
+<% end %>
+<div style="clear:both"></div>
+<table class="grid">
+  <tr>
+    <th width="20%">Username</th>
+    <th width="20%">Email</th>
+    <th>Last Login</th>
+    <th>Login Count</th>
+    <th>Confirmed</th>
+    <th>Credit</th>
+    <% if can?(:update, User) || can?(:destroy, User) %>
+      <th></th>
+    <% end %>
+  </tr>
+  <% unless @users.blank? %>
+    <% @users.each do |user| %>
+    <tr>
+      <td><%= user.username %></td>
+      <td><%= user.email %></td>
+      <td><%= !user.last_sign_in_at.blank? ? user.last_sign_in_at.to_s(:short) : 'Not logged in.' %></td>
+      <td><%= user.sign_in_count %></td>
+      <td><%= user.confirmation_token.blank? ? 'Yes' : 'No' %></td>
+      <td><%= user.credit %></td>
+      <% if can?(:update, User) || can?(:destroy, User) %>
+      <td>
+        <% if can?(:update, User) %>
+          <%= link_to image_tag("admin/edit.png"), edit_admin_user_path(user), :title => 'Edit', :class => 'btn-icon' %>
+        <% end %>
+        <% if can?(:destroy, User) %>
+          <%= link_to image_tag("admin/delete.png"), admin_user_path(user), :confirm => 'Are you sure?', :method => :delete, :class => 'btn-icon', :title => "Delete" %></td>
+        <% end %>
+      <% end %>
+    </tr>
+    <% end %>
+  <% else %>
+    <tr>
+      <td colspan="5">
+        <span>There is no users.</span>
+      </td>
+    </tr>
+  <% end %>
+</table>

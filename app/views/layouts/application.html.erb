@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Won2010</title>
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <%= stylesheet_link_tag 'reset', 'application' %>
+  <%= javascript_include_tag 'jquery', 'rails-jquery' %>
+  <%= csrf_meta_tag %>
+  <%= yield :head %>
+</head>
+<body>
+
+<div id="page-header" class="clearfix">
+	<div id="logo"><h1>Online Auction</h1></div>	
+	<%= render(:partial => "shared/top_menu") %>
+</div>
+<div id="page-notice">
+	<% flash.each do |key, value| %>
+		<p class='<%= key %>'><%= value %></p>	
+	<% end -%>
+</div>
+<div id="page-body">                                                              
+	<%= yield %>
+</div>
+<div id="page-footer">Powered by Online Auction Team.</div>
+</body>
+</html>

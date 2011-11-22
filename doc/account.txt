@@ -1,0 +1,9 @@
+# main email account
+pingwon2010@gmail.com / pingwon1!
+
+# heroku account
+pingwon2010@gmail.com / pingwon1!
+
+# Amazon Web Services account
+pingwon2010@gmail.com / pingwon1!
+
